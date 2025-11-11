@@ -1,4 +1,4 @@
-# Aula 10 - React: Memorização, Interfaces Imperativas e Hooks Customizados <a name="unifaat-frontend-project"></a>
+# Aula 11 - React: Estados globais (Reducers e Contextos) <a name="unifaat-frontend-project"></a>
 
 ## 📑 Sumário
 
