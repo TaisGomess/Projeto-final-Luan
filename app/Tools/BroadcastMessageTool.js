@@ -1,44 +1,28 @@
 // app/Tools/broadcastMessage.js
 
+import { z } from "zod";
 import FirstJob from "../Jobs/FirstJob.js";
 
-/**
- * Registra a tool broadcastMessage no MCP server.
- *
- * Args esperados:
- * {
- *   "name": "lululu",        // opcional
- *   "text": "oi, sou uma ia" // obrigatório
- * }
- */
 export function broadcastMessage(server) {
     server.registerTool(
-        "broadcastMessage",
         {
-            title: "Broadcast message",
+            name: "broadcastMessage",
             description: "Envia uma mensagem para todos os clientes conectados.",
-            inputSchema: {
-                type: "object",
-                properties: {
-                    name: { type: "string" },
-                    text: { type: "string" },
-                },
-                required: ["text"],          // só o texto é obrigatório
-                additionalProperties: false, // evita lixo no payload
-            },
+            // Aqui é Zod, não JSON Schema
+            inputSchema: z.object({
+                name: z.string().optional(),
+                text: z.string(),
+            }),
         },
         async (args, ctx) => {
-            // garante que sempre existe algum name (nem que seja "anonymous")
             const { name = "anonymous", text } = args;
 
-            // dispara o job para mandar via socket
             await FirstJob.dispatchSocket({
                 type: "message",
                 name,
                 text,
             });
 
-            // resposta MCP no formato esperado
             return {
                 content: [
                     {
