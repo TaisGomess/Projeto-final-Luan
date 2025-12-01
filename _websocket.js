@@ -61,6 +61,7 @@ async function setupRabbitWebsocketBridge() {
                     return;
                 }
                 data = data.payload;
+                console.log(data);
                 // Aqui definimos como isso vai aparecer pros clients
                 // data vem do próprio cliente (join/message) OU do evento de disconnect
                 if (data.type === "join" && data.name) {
