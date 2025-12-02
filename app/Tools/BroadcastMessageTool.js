@@ -1,3 +1,7 @@
+// app/Tools/broadcastMessage.js
+
+import { z } from "zod";
+import FirstJob from "../Jobs/FirstJob.js";
 export function classroomAnnouncement(server) {
     server.registerTool(
         "classroomAnnouncement", // nome mais neutro
