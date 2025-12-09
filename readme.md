@@ -1,329 +1,131 @@
-# Aula 14 - Servidores MCP <a name="unifaat-frontend-project"></a>
+📦 Projeto Final – Desenvolvimento Web II
+🎯 Objetivo desta etapa
 
-## 📑 Sumário
+O objetivo deste projeto é desenvolver um sistema web utilizando React no frontend e Node.js no backend, integrando funcionalidades de CRUD por meio de API REST, comunicação em tempo real utilizando WebSocket e organização da lógica por meio de hooks customizados no frontend.
 
-- [Instalação e Execução](#instalacao-e-execucao)
-- [Acesse](#acesse)
-- [🚀 Como Criar Elementos](#como-criar-elementos)
-  - [🧩 Criar uma Rota](#criar-uma-rota)
-  - [📦 Criar um Controller](#criar-um-controller)
-  - [⛓️ Criar um Middleware](#criar-um-middleware)
-  - [💻 Criar um Command](#criar-um-command)
-  - [📦 Migrations do Projeto](#migrations)
-  - [🌱 Seeds do Projeto](#seeds)
-- [📦 Bibliotecas Utilizadas](#bibliotecas-utilizadas)
-- [📁 Estrutura de Diretórios (raiz)](#estrutura-de-diretorios-raiz)
-- [🧾 Como Criar um Novo Documento Swagger](#swagger)
-- [🐳 Containers e Imagens Docker](#containers-e-imagens-docker)
+A aplicação permite gerenciamento de usuários, produtos e comunicação via chat em tempo real, aplicando conceitos modernos do desenvolvimento web.
 
----
+▶️ Instruções para execução
+1. Clonar o repositório
+git clone https://github.com/TaisGomess/Projeto-final-Luan.git
 
-## Instalação e Execução <a name="instalacao-e-execucao"></a>
+2. Instalar dependências
+npm install
 
-### Siga os passos abaixo para rodar o projeto via Docker:
+3. Executar o frontend
+npm run dev
 
-1. Clonar o repositório:
 
-   ```sh
-   git clone https://github.com/luan-tavares/unifaat-frontend-project
-   ```
+Acesse no navegador:
 
-2. Entrar na pasta do projeto:
+http://localhost:5173
 
-   ```sh
-   cd unifaat-frontend-project
-   ```
+⚙️ Instruções de Build (Vite)
 
-3. Criar o arquivo `.env` na raiz do projeto copiando o `.env.example`:
+Para gerar os arquivos de produção:
 
-   > No Windows:
+npm run build
 
-   ```sh
-   copy .env.example .env
-   ```
 
-   > No Linux:
+Para visualizar a build localmente:
 
-   ```sh
-   cp .env.example .env
-   ```
+npm run preview
 
-4. Abrir o arquivo `.env` recém criado e preencher os campos abaixo:
+🗂️ Entidades do CRUD
 
-   ```env
-   POSTGRES_PASSWORD=123456
-   JWT_SECRET=segredo
-   ```
+As entidades implementadas no projeto são:
 
-5. Instalar as dependências:
+Usuários
 
-   ```sh
-   npm install
-   ```
+Produtos
 
-6. Em um novo terminal, executar o pré-compilador
+Chat
 
-   ```sh
-   npm run watch
-   ```
+Cada entidade possui operações completas de:
 
-7. Subir a aplicação com Docker Compose:
+Criação
 
-   > Docker Compose tradicional:
+Listagem
 
-   ```sh
-   docker-compose up --build
-   ```
+Atualização
 
-   > Docker Compose moderno:
+Remoção
 
-   ```sh
-   docker compose up --build
-   ```
+🌐 Comunicação WebSocket
 
-8. Executar as migrations utilizando UM desses comandos:
+O WebSocket foi utilizado para permitir comunicação em tempo real, principalmente no módulo de chat.
 
-   > Container (Docker Compose tradicional):
+A implementação permite:
 
-   ```sh
-   docker-compose run --rm nodecli-container migrate
-   ```
+Envio e recebimento de mensagens instantaneamente
 
-   > Container (Docker Compose moderno):
+Atualização automática da interface
 
-   ```sh
-   docker compose run --rm nodecli-container migrate
-   ```
+Comunicação contínua entre frontend e backend sem necessidade de requisições constantes
 
-   > Host:
+🎣 Hooks Customizados
 
-   ```sh
-   node command migrate
-   ```
+Foram criados hooks customizados para organização da lógica da aplicação:
 
-9. Executar as seeds utilizando UM desses comandos:
+useWebSocket
 
-   > Container (Docker Compose tradicional):
+Responsável por:
 
-   ```sh
-   docker-compose run --rm nodecli-container seed
-   ```
+Estabelecer conexão com o servidor WebSocket
 
-   > Container (Docker Compose moderno):
+Escutar mensagens recebidas
 
-   ```sh
-   docker compose run --rm nodecli-container seed
-   ```
+Controlar o estado das mensagens em tempo real
 
-   > Host:
+useListProductsApi
 
-   ```sh
-   node command seed
-   ```
+Responsável por:
 
-10. Instalar vite globalmente no host e executar (opcional)
+Realizar requisições HTTP na API REST
 
-   ```sh
-   npm install -g vite
-   ```
-   ```sh
-   vite
-   ```
----
+Listar produtos vindos do backend
 
-## Acesse <a name="acesse"></a>
+Centralizar regras de consumo da API
 
-- Servidor nginx: [http://localhost:8080](http://localhost:8080)
-- Documentação da API: [http://localhost:8080/docs](http://localhost:8080/docs)
-- Servidor Vite: [http://localhost:5173](http://localhost:5173)
+🌍 Rotas da API utilizadas
+Usuários
+GET    http://localhost:3000/usuarios
+POST   http://localhost:3000/usuarios
+PUT    http://localhost:3000/usuarios/:id
+DELETE http://localhost:3000/usuarios/:id
 
+Produtos
+GET    http://localhost:3000/produtos
+POST   http://localhost:3000/produtos
+PUT    http://localhost:3000/produtos/:id
+DELETE http://localhost:3000/produtos/:id
 
-**Importante:** O arquivo `./Insomnia.yml` DEVE ser utilizado no Insomnia para testar as rotas.
+Chat
+GET    http://localhost:3000/chat
+POST   http://localhost:3000/chat
 
----
+✅ Tecnologias utilizadas
 
-## 🚀 Como Criar Elementos <a name="como-criar-elementos"></a>
+React
 
-### 🧩 Criar uma Rota <a name="criar-uma-rota"></a>
+TypeScript
 
-1. Defina o path da rota em `routes/web.js` ou `routes/api.js`
-2. Associe um controller da `app/Http/Controllers/`
+Vite
 
-Exemplo (`routes/api.js`):
-```js
-router.get('/exemplo', MeuController);
-```
+WebSocket
 
-### 📦 Criar um Controller <a name="criar-um-controller"></a>
+Node.js
 
-1. Crie um novo arquivo em `app/Http/Controllers/...`
+Express
 
-```js
-export default async function(request, response) {
-  ...
-  # Minha Lógica
-  ...
-  response.status(200).json({"success": "Minha resposta"});
-}
-```
+Swagger
 
-### ⛓️ Criar um Middleware <a name="criar-um-middleware"></a>
+Git e GitHub
 
-Adicione em `app/Http/Middlewares/`, por exemplo:
+👩‍💻 Autora
 
-```js
-export default async function (request, response, next) {
-  console.log(`[${request.method}] ${request.url}`);
-  next();
-}
-```
-
-Depois registre na rota.
-
-
-### 💻 Criar um Command <a name="criar-um-command"></a>
-
-1. Crie um arquivo em `app/Commands/NomeDoCommand.js`:
-
-```js
-export default {
-    name: 'nome-comando',
-    description: 'minha descrição',
-    arguments: {
-        ...
-    },
-
-    handle: async function ({ argument1 }) {
-        console.log(argument1);
-        ...
-        # Minha lógica
-        ...
-    }
-}
-```
-
-2. Execute via terminal:
-
-```sh
-node command meu-comando
-```
-
----
-
-### 📦 Migrations do Projeto <a name="migrations"></a>
-
-As migrations deste projeto são responsáveis por versionar a estrutura do banco de dados de forma incremental e ordenada por data.
-
-#### 📁 Localização
-
-Todos os arquivos de migrations ficam em:
-
-```
-./database/migrations
-```
-
-#### 📄 Formato do Arquivo
-
-Cada migration segue o seguinte padrão de nomenclatura:
-
-```
-YYYY_MM_DD_HH_MM_SS_nome_descritivo.js
-```
-
-Exemplo:
-
-```
-2025_06_07_00_00_00_create_roles_table.js
-```
-
-#### 🧬 Estrutura do Código
-
-Cada migration exporta dois métodos assíncronos: `up()` e `down()`.
-```js
-import db from '../../config/db.js';
-
-async function up() {
-  await db.query(`
-    CREATE TABLE IF NOT EXISTS roles (
-        id SERIAL PRIMARY KEY,
-        nome VARCHAR(155) UNIQUE NOT NULL,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-    );
-  `);
-}
-
-async function down() {
-  await db.query(`DROP TABLE roles;`);
-}
-
-export default { up, down };
-```
-
-#### 🛠 Como Criar uma Nova Migration
-
-1. **Defina um nome descritivo e a hora atual no início**  
-2. **Implemente as funções `up()` e `down()`**  
-3. **Salve o arquivo em `./database/migrations`**
-
-#### 🚀 Execução das Migrations
-
-A execução é feita via CLI e respeita a ordem de timestamp.
-
-#### ✅ Boas Práticas
-
-- Uma migration por alteração
-- Sempre implemente `down()`
-- Não altere migrations antigas
-
----
-
-### 🌱 Seeds do Projeto <a name="seeds"></a>
-
-Seeds são scripts responsáveis por popular o banco de dados com dados iniciais ou de teste.
-
-#### 📁 Localização
-
-```
-./database/seeds/
-```
-
-#### 🧾 Nome do Arquivo
-
-```
-001_roles_and_users.js
-002_outra_seed.js
-...
-```
-
-#### 🧬 Estrutura do Arquivo
-
-```js
-import bcrypt from 'bcrypt';
-import UserModel from '../../app/Models/UserModel.js';
-
-export default {
-    up: async () => {
-
-        const senha = "123456";
-
-        await UserModel.bulkCreate([
-            { nome: 'User1', email: 'user1@example.com', id_role: rows[0].id, senha: await bcrypt.hash(senha, 10) },
-            { nome: 'User2', email: 'user2@example.com', id_role: rows[1].id, senha: await bcrypt.hash(senha, 10) },
-        ])
-    },
-
-    down: async () => {
-        await UserModel.destroy({
-            where: {
-                email: ['user1@example.com', 'user2@example.com']
-            }
-        });
-
-       
-    }
-};
-```
+Taís Gomes
+Curso: Análise e Desenvolvimento de Sistemas – UniFAAT
 
 #### ⚠️ Importante
 
